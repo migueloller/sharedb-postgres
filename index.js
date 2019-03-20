@@ -64,9 +64,9 @@ PostgresDB.prototype.commit = function(collection, id, op, snapshot, options, ca
         var max_version = res.rows[0].max_version;
         if (max_version == null)
           max_version = 0;
-        if (snapshot.v !== max_version + 1) {
-          done();
-          return callback(null, false);
+        if (!(snapshot.v > max_version)) {
+          done()
+          return callback(new Error('Received a snapshot with a version conflicting with operations'));
         }
         client.query('BEGIN', function(err) {
           client.query(
