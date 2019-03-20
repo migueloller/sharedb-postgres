@@ -65,6 +65,7 @@ PostgresDB.prototype.commit = function(collection, id, op, snapshot, options, ca
         if (max_version == null)
           max_version = 0;
         if (snapshot.v !== max_version + 1) {
+          done();
           return callback(null, false);
         }
         client.query('BEGIN', function(err) {
